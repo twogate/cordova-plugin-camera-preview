@@ -701,7 +701,13 @@
         CIImage *imageToFilter;
         CIImage *finalCImage;
 
-        imageToFilter = capturedCImage;
+        //fix front mirroring
+        if (self.sessionManager.defaultCamera == AVCaptureDevicePositionFront) {
+          CGAffineTransform matrix = CGAffineTransformTranslate(CGAffineTransformMakeScale(1, -1), 0, capturedCImage.extent.size.height);
+          imageToFilter = [capturedCImage imageByApplyingTransform:matrix];
+        } else {
+          imageToFilter = capturedCImage;
+        }
 
         CIFilter *filter = [self.sessionManager ciFilter];
         if (filter != nil) {

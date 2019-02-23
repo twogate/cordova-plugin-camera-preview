@@ -280,12 +280,6 @@ class Preview extends RelativeLayout implements SurfaceHolder.Callback {
   public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
     if(mCamera != null) {
       try {
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
-
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-          mSurfaceView.setScaleX(-1.0f);
-        }
         // Now that the size is known, set up the camera parameters and begin
         // the preview.
         mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
