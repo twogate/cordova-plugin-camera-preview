@@ -700,11 +700,16 @@
     if (!granted) {
       //Not granted access to mediaType
       dispatch_async(dispatch_get_main_queue(), ^{
-          [[[UIAlertView alloc] initWithTitle:@"Error"
-                                      message:@"Camera permission not found. Please, check your privacy settings."
-                                     delegate:self
-                            cancelButtonTitle:@"OK"
-                            otherButtonTitles:nil] show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"エラー" message:@"カメラの起動に失敗しました。カメラへのアクセスを許可してください。" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"キャンセル" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"設定を開く" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }]];
+        UIViewController *baseView = [UIApplication sharedApplication].keyWindow.rootViewController;
+        while (baseView.presentedViewController != nil && !baseView.presentedViewController.isBeingDismissed) {
+          baseView = baseView.presentedViewController;
+        }
+        [baseView presentViewController:alert animated:YES completion:nil];
       });
     }
   }];
