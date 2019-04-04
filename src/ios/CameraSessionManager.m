@@ -696,23 +696,7 @@
 - (void)checkDeviceAuthorizationStatus {
   NSString *mediaType = AVMediaTypeVideo;
 
-  [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-    if (!granted) {
-      //Not granted access to mediaType
-      dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"エラー" message:@"カメラの起動に失敗しました。カメラへのアクセスを許可してください。" preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"キャンセル" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"設定を開く" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-          [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        }]];
-        UIViewController *baseView = [UIApplication sharedApplication].keyWindow.rootViewController;
-        while (baseView.presentedViewController != nil && !baseView.presentedViewController.isBeingDismissed) {
-          baseView = baseView.presentedViewController;
-        }
-        [baseView presentViewController:alert animated:YES completion:nil];
-      });
-    }
-  }];
+  [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {}];
 }
 
 // Find a camera with the specified AVCaptureDevicePosition, returning nil if one is not found
