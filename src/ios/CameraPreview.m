@@ -68,9 +68,14 @@
     self.sessionManager.delegate = self.cameraRenderController;
 
     [self.sessionManager setupSession:defaultCamera completion:^(BOOL started) {
+      CDVPluginResult *pluginResult;
 
-      [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-
+      if (started) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+      } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Permission denied"];
+      }
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
   } else {
