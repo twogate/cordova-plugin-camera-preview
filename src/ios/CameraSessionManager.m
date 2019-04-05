@@ -91,7 +91,11 @@
 
 - (void) setupSession:(NSString *)defaultCamera completion:(void(^)(BOOL started))completion{
   // If this fails, video input will just stream blank frames and the user will be notified. User only has to accept once.
-  [self checkDeviceAuthorizationStatus];
+  [self checkDeviceAuthorizationStatus: completion:^(BOOL granted){
+    if (!granted) {
+      completion(granted);
+    }
+  }];
 
   dispatch_async(self.sessionQueue, ^{
       NSError *error = nil;
@@ -693,10 +697,12 @@
   [self.device unlockForConfiguration];
 }
 
-- (void)checkDeviceAuthorizationStatus {
+- (void)checkDeviceAuthorizationStatus: completion:(void(^)(BOOL granted))completion {
   NSString *mediaType = AVMediaTypeVideo;
 
-  [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {}];
+  [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+    completion(granted);
+  }];
 }
 
 // Find a camera with the specified AVCaptureDevicePosition, returning nil if one is not found
