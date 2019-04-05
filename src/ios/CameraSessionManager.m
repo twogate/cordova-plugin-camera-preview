@@ -701,6 +701,7 @@
   NSString *mediaType = AVMediaTypeVideo;
 
   [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+    NSLog(@"Grant camera access permission...%@", (granted ? @"OK" : @"Fail"));
     completion(granted);
   }];
 }
